@@ -156,7 +156,7 @@ export function concatBuffers(...args: Buffer[]): Buffer {
   return result;
 }
 
-export function trimLeft(data: Buffer, length: number) {
+export function trimLeft(data: Buffer, length: number): Buffer {
   const diff = data.length - length;
   if (diff > 0) {
     data = data.slice(diff);
@@ -164,7 +164,7 @@ export function trimLeft(data: Buffer, length: number) {
   return data;
 }
 
-export function trimRight(data: Buffer, length: number) {
+export function trimRight(data: Buffer, length: number): Buffer {
   return data.slice(0, length);
 }
 
@@ -173,7 +173,7 @@ export function padString(
   length: number,
   left: boolean,
   padding = '0'
-) {
+): string {
   const diff = length - str.length;
   let result = str;
   if (diff > 0) {
@@ -183,11 +183,11 @@ export function padString(
   return result;
 }
 
-export function padLeft(str: string, length: number, padding = '0') {
+export function padLeft(str: string, length: number, padding = '0'): string {
   return padString(str, length, true, padding);
 }
 
-export function padRight(str: string, length: number, padding = '0') {
+export function padRight(str: string, length: number, padding = '0'): string {
   return padString(str, length, false, padding);
 }
 
