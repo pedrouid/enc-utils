@@ -208,3 +208,12 @@ export function isHexString(value: any, length?: number): boolean {
   }
   return true;
 }
+
+export function sanitizeHex(hex: string): string {
+  hex = removeHexPrefix(hex);
+  hex = hex.length % 2 !== 0 ? '0' + hex : hex;
+  if (hex) {
+    hex = addHexPrefix(hex);
+  }
+  return hex;
+}

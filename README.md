@@ -70,4 +70,5 @@ function padRight(str: string, length: number, padding?: string): string;
 function removeHexPrefix(hex: string): string;
 function addHexPrefix(hex: string): string;
 function isHexString(value: any, length?: number): boolean;
+function sanitizeHex(hex: string): string;
 ```
