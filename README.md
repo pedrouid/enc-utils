@@ -45,14 +45,6 @@ function arrayBufferToHex(arrBuf: ArrayBuffer, prefixed?: boolean): string;
 function arrayBufferToArray(arrBuf: ArrayBuffer): Uint8Array;
 function arrayBufferToNumber(arrBuf: ArrayBuffer): number;
 
-// -- Number --------------------------------------------- //
-
-function numberToBuffer(num: number): Buffer;
-function numberToUtf8(num: number): string;
-function numberToHex(num: number, prefixed?: boolean): string;
-function numberToArray(num: number): Uint8Array;
-function numberToArrayBuffer(num: number): ArrayBuffer;
-
 // -- Misc ----------------------------------------------- //
 
 function concatArrayBuffers(...args: ArrayBuffer[]): ArrayBuffer;

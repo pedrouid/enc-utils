@@ -120,29 +120,6 @@ export function arrayBufferToNumber(arrBuf: ArrayBuffer): number {
   return bufferToNumber(buf);
 }
 
-// -- Number --------------------------------------------- //
-
-export function numberToBuffer(num: number): Buffer {
-  return hexToBuffer(numberToHex(num));
-}
-
-export function numberToUtf8(num: number): string {
-  return bufferToUtf8(numberToBuffer(num));
-}
-
-export function numberToHex(num: number, prefixed = false): string {
-  const hex = num.toString(16);
-  return prefixed ? addHexPrefix(hex) : hex;
-}
-
-export function numberToArray(num: number): Uint8Array {
-  return bufferToArray(numberToBuffer(num));
-}
-
-export function numberToArrayBuffer(num: number): ArrayBuffer {
-  return bufferToArrayBuffer(numberToBuffer(num));
-}
-
 // -- Misc ----------------------------------------------- //
 
 export function concatArrayBuffers(...args: ArrayBuffer[]): ArrayBuffer {
