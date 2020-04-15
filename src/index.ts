@@ -1,25 +1,9 @@
+// -- Constants ------------------------------------------ //
+
 export const HEX_ENC = 'hex';
 export const UTF8_ENC = 'utf8';
 
-export function removeHexPrefix(hex: string): string {
-  return hex.replace(/^0x/, '');
-}
-
-export function addHexPrefix(hex: string): string {
-  return hex.startsWith('0x') ? hex : `0x${hex}`;
-}
-
-export function utf8ToBuffer(utf8: string): Buffer {
-  return Buffer.from(utf8, UTF8_ENC);
-}
-
-export function hexToBuffer(hex: string): Buffer {
-  return Buffer.from(removeHexPrefix(hex), HEX_ENC);
-}
-
-export function arrayToBuffer(arr: Uint8Array): Buffer {
-  return Buffer.from(arr);
-}
+// -- Buffer --------------------------------------------- //
 
 export function bufferToUtf8(buf: Buffer): string {
   return buf.toString(UTF8_ENC);
@@ -34,12 +18,116 @@ export function bufferToArray(buf: Buffer): Uint8Array {
   return new Uint8Array(buf);
 }
 
-export function hexToUtf8(hex: string): string {
-  return bufferToUtf8(hexToBuffer(hex));
+export function bufferToArrayBuffer(buffer: Buffer): ArrayBuffer {
+  return arrayToArrayBuffer(bufferToArray(buffer));
+}
+
+export function bufferToNumber(buf: Buffer): number {
+  return hexToNumber(bufferToHex(buf));
+}
+
+// -- Utf8 ----------------------------------------------- //
+
+export function utf8ToBuffer(utf8: string): Buffer {
+  return Buffer.from(utf8, UTF8_ENC);
 }
 
 export function utf8ToHex(utf8: string, prefixed = false): string {
   return bufferToHex(utf8ToBuffer(utf8), prefixed);
+}
+
+export function utf8ToArray(utf8: string): Uint8Array {
+  return bufferToArray(utf8ToBuffer(utf8));
+}
+
+export function utf8ToArrayBuffer(utf8: string): ArrayBuffer {
+  return bufferToArrayBuffer(utf8ToBuffer(utf8));
+}
+
+export function utf8ToNumber(utf8: string): number {
+  return bufferToNumber(utf8ToBuffer(utf8));
+}
+
+// -- Hex ------------------------------------------------ //
+
+export function hexToBuffer(hex: string): Buffer {
+  return Buffer.from(removeHexPrefix(hex), HEX_ENC);
+}
+
+export function hexToUtf8(hex: string): string {
+  return bufferToUtf8(hexToBuffer(hex));
+}
+
+export function hexToArray(hex: string): Uint8Array {
+  return bufferToArray(hexToBuffer(hex));
+}
+
+export function hexToArrayBuffer(hex: string): ArrayBuffer {
+  return bufferToArrayBuffer(hexToBuffer(hex));
+}
+
+export function hexToNumber(hex: string): number {
+  return parseInt(hex, 16);
+}
+
+// -- Uint8Array ----------------------------------------- //
+
+export function arrayToBuffer(arr: Uint8Array): Buffer {
+  return Buffer.from(arr);
+}
+
+export function arrayToUtf8(arr: Uint8Array): string {
+  return bufferToUtf8(arrayToBuffer(arr));
+}
+
+export function arrayToHex(arr: Uint8Array, prefixed = false): string {
+  return bufferToHex(arrayToBuffer(arr), prefixed);
+}
+
+export function arrayToArrayBuffer(arr: Uint8Array): ArrayBuffer {
+  return arr.buffer;
+}
+
+export function arrayToNumber(arr: Uint8Array): number {
+  return bufferToNumber(arrayToBuffer(arr));
+}
+
+// -- ArrayBuffer ---------------------------------------- //
+
+export function arrayBufferToBuffer(arrBuf: ArrayBuffer): Buffer {
+  return arrayToBuffer(arrayBufferToArray(arrBuf));
+}
+
+export function arrayBufferToUtf8(arrBuf: ArrayBuffer): string {
+  const buf = arrayBufferToBuffer(arrBuf);
+  return bufferToUtf8(buf);
+}
+
+export function arrayBufferToHex(
+  arrBuf: ArrayBuffer,
+  prefixed = false
+): string {
+  const buf = arrayBufferToBuffer(arrBuf);
+  return bufferToHex(buf, prefixed);
+}
+
+export function arrayBufferToArray(arrBuf: ArrayBuffer): Uint8Array {
+  return new Uint8Array(arrBuf);
+}
+
+export function arrayBufferToNumber(arrBuf: ArrayBuffer): number {
+  const buf = arrayBufferToBuffer(arrBuf);
+  return bufferToNumber(buf);
+}
+
+// -- Number --------------------------------------------- //
+
+export function numberToBuffer(num: number): Buffer {
+  return hexToBuffer(numberToHex(num));
+}
+
+export function numberToUtf8(num: number): string {
+  return bufferToUtf8(numberToBuffer(num));
 }
 
 export function numberToHex(num: number, prefixed = false): string {
@@ -47,16 +135,20 @@ export function numberToHex(num: number, prefixed = false): string {
   return prefixed ? addHexPrefix(hex) : hex;
 }
 
-export function hexToNumber(hex: string): number {
-  return parseInt(hex, 16);
+export function numberToArray(num: number): Uint8Array {
+  return bufferToArray(numberToBuffer(num));
 }
 
-export function bufferToNumber(buf: Buffer): number {
-  return hexToNumber(bufferToHex(buf));
+export function numberToArrayBuffer(num: number): ArrayBuffer {
+  return bufferToArrayBuffer(numberToBuffer(num));
 }
 
-export function numberToBuffer(num: number): Buffer {
-  return hexToBuffer(numberToHex(num));
+// -- Misc ----------------------------------------------- //
+
+export function concatArrayBuffers(...args: ArrayBuffer[]): ArrayBuffer {
+  const hex: string = args.map(b => arrayBufferToHex(b, true)).join('');
+  const result: ArrayBuffer = hexToArrayBuffer(hex);
+  return result;
 }
 
 export function concatBuffers(...args: Buffer[]): Buffer {
@@ -97,4 +189,12 @@ export function padLeft(str: string, length: number, padding = '0') {
 
 export function padRight(str: string, length: number, padding = '0') {
   return padString(str, length, false, padding);
+}
+
+export function removeHexPrefix(hex: string): string {
+  return hex.replace(/^0x/, '');
+}
+
+export function addHexPrefix(hex: string): string {
+  return hex.startsWith('0x') ? hex : `0x${hex}`;
 }
