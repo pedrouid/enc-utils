@@ -9,7 +9,7 @@ module.exports = {
     path: path.resolve(__dirname, 'dist', 'umd'),
     filename: '[name].min.js',
     libraryTarget: 'umd',
-    library: 'encodingUtils',
+    library: 'encUtils',
     umdNamedDefine: true,
     globalObject: 'this',
   },

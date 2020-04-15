@@ -1,7 +1,7 @@
-import * as encodingUtils from '../src';
+import * as encUtils from '../src';
 
-describe('encodingUtils', () => {
+describe('encUtils', () => {
   it('needs tests', async () => {
-    expect(encodingUtils).toBeTruthy();
+    expect(encUtils).toBeTruthy();
   });
 });
