@@ -1,7 +1,7 @@
 // -- Constants ------------------------------------------ //
 
-export const HEX_ENC = 'hex';
-export const UTF8_ENC = 'utf8';
+const HEX_ENC = 'hex';
+const UTF8_ENC = 'utf8';
 
 // -- Buffer --------------------------------------------- //
 
@@ -197,4 +197,14 @@ export function removeHexPrefix(hex: string): string {
 
 export function addHexPrefix(hex: string): string {
   return hex.startsWith('0x') ? hex : `0x${hex}`;
+}
+
+export function isHexString(value: any, length?: number): boolean {
+  if (typeof value !== 'string' || !value.match(/^0x[0-9A-Fa-f]*$/)) {
+    return false;
+  }
+  if (length && value.length !== 2 + 2 * length) {
+    return false;
+  }
+  return true;
 }

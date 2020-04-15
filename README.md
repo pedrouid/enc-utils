@@ -5,11 +5,6 @@ Byte encoding utils
 ## API
 
 ```typescript
-// -- Constants ------------------------------------------ //
-
-const HEX_ENC = 'hex';
-const UTF8_ENC = 'utf8';
-
 // -- Buffer --------------------------------------------- //
 
 function bufferToUtf8(buf: Buffer): string;
@@ -74,4 +69,5 @@ function padLeft(str: string, length: number, padding?: string): string;
 function padRight(str: string, length: number, padding?: string): string;
 function removeHexPrefix(hex: string): string;
 function addHexPrefix(hex: string): string;
+function isHexString(value: any, length?: number): boolean;
 ```
