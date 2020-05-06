@@ -42,6 +42,8 @@ describe('EncUtils', () => {
     const expected = TEST_STRING_HEX;
     const result = encUtils.bufferToHex(input);
     expect(compare(result, expected)).toBeTruthy();
+    expect(result.startsWith('0x')).toBeFalsy();
+    expect(result.length % 2).toBeFalsy();
   });
 
   it('bufferToUtf8', async () => {
@@ -72,6 +74,8 @@ describe('EncUtils', () => {
     const expected = TEST_STRING_HEX;
     const result = encUtils.arrayToHex(input);
     expect(compare(result, expected)).toBeTruthy();
+    expect(result.startsWith('0x')).toBeFalsy();
+    expect(result.length % 2).toBeFalsy();
   });
 
   it('arrayToUtf8', async () => {
@@ -139,6 +143,8 @@ describe('EncUtils', () => {
     const expected = TEST_STRING_HEX;
     const result = encUtils.utf8ToHex(input);
     expect(compare(result, expected)).toBeTruthy();
+    expect(result.startsWith('0x')).toBeFalsy();
+    expect(result.length % 2).toBeFalsy();
   });
 
   it('utf8ToNumber', async () => {
@@ -176,6 +182,8 @@ describe('EncUtils', () => {
     const expected = TEST_NUMBER_HEX;
     const result = encUtils.numberToHex(input);
     expect(compare(result, expected)).toBeTruthy();
+    expect(result.startsWith('0x')).toBeFalsy();
+    expect(result.length % 2).toBeFalsy();
   });
 
   // -- Validators ----------------------------------------- //
