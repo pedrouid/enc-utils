@@ -45,7 +45,7 @@ export function utf8ToArrayBuffer(utf8: string): ArrayBuffer {
 }
 
 export function utf8ToNumber(utf8: string): number {
-  return bufferToNumber(utf8ToBuffer(utf8));
+  return parseInt(utf8, 10);
 }
 
 // -- Hex ------------------------------------------------ //
