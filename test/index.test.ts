@@ -301,4 +301,13 @@ describe('EncUtils', () => {
       '0x00' + TEST_STRING_HEX
     );
   });
+
+  it('removeHexLeadingZeros', async () => {
+    expect(encUtils.removeHexLeadingZeros(TEST_STRING_HEX)).toEqual(
+      TEST_STRING_HEX
+    );
+    expect(encUtils.removeHexLeadingZeros('0' + TEST_STRING_HEX)).toEqual(
+      TEST_STRING_HEX
+    );
+  });
 });

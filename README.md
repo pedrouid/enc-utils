@@ -62,4 +62,5 @@ function padRight(str: string, length: number, padding?: string): string;
 function removeHexPrefix(hex: string): string;
 function addHexPrefix(hex: string): string;
 function sanitizeHex(hex: string): string;
+function removeHexLeadingZeros(hex: string): string;
 ```

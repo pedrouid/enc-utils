@@ -1,5 +1,4 @@
 import BN from 'bn.js';
-import { Buffer } from 'buffer';
 import _isTypedArray from 'is-typedarray';
 import typedArrayToBuffer from 'typedarray-to-buffer';
 
@@ -92,23 +91,17 @@ export function utf8ToNumber(utf8: string): number {
 
 export function numberToBuffer(num: number): Buffer {
   const hex = numberToHex(num);
-  const buf = hexToBuffer(hex);
-  return buf;
+  return hexToBuffer(hex);
 }
 
 export function numberToArray(num: number): Uint8Array {
   const hex = numberToHex(num);
-  const arrBuf = hexToArray(hex);
-  return arrBuf;
+  return hexToArray(hex);
 }
 
 export function numberToHex(num: number | string, prefixed?: boolean): string {
-  let hex = new BN(num).toString(16);
-  hex = removeHexPrefix(sanitizeHex(hex));
-  if (prefixed) {
-    hex = addHexPrefix(hex);
-  }
-  return hex;
+  const hex = removeHexPrefix(sanitizeHex(new BN(num).toString(16)));
+  return prefixed ? addHexPrefix(hex) : hex;
 }
 
 export function numberToUtf8(num: number): string {
@@ -230,4 +223,11 @@ export function sanitizeHex(hex: string): string {
     hex = addHexPrefix(hex);
   }
   return hex;
+}
+
+export function removeHexLeadingZeros(hex: string): string {
+  const prefixed = hex.startsWith('0x');
+  hex = removeHexPrefix(hex);
+  hex = hex.startsWith(STRING_ZERO) ? hex.substring(1) : hex;
+  return prefixed ? addHexPrefix(hex) : hex;
 }
