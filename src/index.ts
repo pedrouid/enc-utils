@@ -6,6 +6,7 @@ import typedArrayToBuffer from 'typedarray-to-buffer';
 
 const ENC_HEX = 'hex';
 const ENC_UTF8 = 'utf8';
+const ENC_BIN = 'binary';
 
 const TYPE_BUFFER = 'buffer';
 const TYPE_ARRAY = 'array';
@@ -33,6 +34,10 @@ export function bufferToNumber(buf: Buffer): number {
   return hexToNumber(bufferToHex(buf));
 }
 
+export function bufferToBinary(buf: Buffer): string {
+  return arrayToBinary(bufferToArray(buf));
+}
+
 // -- Uint8Array ----------------------------------------- //
 
 export function arrayToBuffer(arr: Uint8Array): Buffer {
@@ -49,6 +54,12 @@ export function arrayToUtf8(arr: Uint8Array): string {
 
 export function arrayToNumber(arr: Uint8Array): number {
   return bufferToNumber(arrayToBuffer(arr));
+}
+
+export function arrayToBinary(arr: Uint8Array): string {
+  return Array.from(arr)
+    .map(numberToBinary)
+    .join('');
 }
 
 // -- Hex ------------------------------------------------ //
@@ -69,6 +80,10 @@ export function hexToNumber(hex: string): number {
   return new BN(removeHexPrefix(hex), 'hex').toNumber();
 }
 
+export function hexToBinary(hex: string): string {
+  return arrayToBinary(hexToArray(hex));
+}
+
 // -- Utf8 ----------------------------------------------- //
 
 export function utf8ToBuffer(utf8: string): Buffer {
@@ -87,16 +102,18 @@ export function utf8ToNumber(utf8: string): number {
   return new BN(utf8, 10).toNumber();
 }
 
+export function utf8ToBinary(utf8: string): string {
+  return arrayToBinary(utf8ToArray(utf8));
+}
+
 // -- Number ----------------------------------------------- //
 
 export function numberToBuffer(num: number): Buffer {
-  const hex = numberToHex(num);
-  return hexToBuffer(hex);
+  return hexToBuffer(numberToHex(num));
 }
 
 export function numberToArray(num: number): Uint8Array {
-  const hex = numberToHex(num);
-  return hexToArray(hex);
+  return hexToArray(numberToHex(num));
 }
 
 export function numberToHex(num: number | string, prefixed?: boolean): string {
@@ -105,11 +122,47 @@ export function numberToHex(num: number | string, prefixed?: boolean): string {
 }
 
 export function numberToUtf8(num: number): string {
-  const utf8 = new BN(num).toString();
-  return utf8;
+  return new BN(num).toString();
+}
+
+export function numberToBinary(num: number): string {
+  const bin = (num >>> 0).toString(2);
+  return padLeft(bin, calcByteLength(bin.length));
+}
+
+// -- Binary ----------------------------------------------- //
+
+export function binaryToBuffer(bin: string): Buffer {
+  return arrayToBuffer(binaryToArray(bin));
+}
+
+export function binaryToArray(bin: string): Uint8Array {
+  return new Uint8Array(splitBytes(bin) as any[]);
+}
+
+export function binaryToHex(bin: string | string, prefixed?: boolean): string {
+  return arrayToHex(binaryToArray(bin), prefixed);
+}
+
+export function binaryToUtf8(bin: string): string {
+  return arrayToUtf8(binaryToArray(bin));
+}
+
+export function binaryToNumber(bin: string): number {
+  return arrayToNumber(binaryToArray(bin));
 }
 
 // -- Validators ----------------------------------------- //
+
+export function isBinaryString(value: any): boolean {
+  if (typeof value !== 'string' || !new RegExp(/^[01]+$/).test(value)) {
+    return false;
+  }
+  if (value.length % 8 !== 0) {
+    return false;
+  }
+  return true;
+}
 
 export function isHexString(value: any, length?: number): boolean {
   if (typeof value !== 'string' || !value.match(/^0x[0-9A-Fa-f]*$/)) {
@@ -152,6 +205,9 @@ export function getType(val: any) {
 }
 
 export function getEncoding(str: string) {
+  if (isBinaryString(str)) {
+    return ENC_BIN;
+  }
   if (isHexString(str)) {
     return ENC_HEX;
   }
@@ -175,6 +231,22 @@ export function trimLeft(data: Buffer, length: number): Buffer {
 
 export function trimRight(data: Buffer, length: number): Buffer {
   return data.slice(0, length);
+}
+
+export function calcByteLength(length: number, byteSize = 8): number {
+  const remainder = length % byteSize;
+  return remainder
+    ? ((length - remainder) / byteSize) * byteSize + byteSize
+    : length;
+}
+
+export function splitBytes(str: string, byteSize = 8): string[] {
+  const bytes = str.match(new RegExp(`.{${byteSize}}`, 'gi'));
+  if (!bytes)
+    throw new Error(
+      `bytes string smaller than expected byte size: ${byteSize}`
+    );
+  return Array.from(bytes);
 }
 
 function padString(
