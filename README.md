@@ -55,6 +55,7 @@ function binaryToNumber(bin: string): number;
 
 // -- Validators ----------------------------------------- //
 
+function isBinaryString(value: any): boolean;
 function isHexString(value: any, length?: number): boolean;
 function isBuffer(val: any): boolean;
 function isTypedArray(val: any): boolean;
@@ -71,6 +72,8 @@ function trimRight(data: Buffer, length: number): Buffer;
 
 function calcByteLength(length: number, byteSize: number): number;
 function splitBytes(str: string, byteSize: number): string[];
+function swapBytes(str: string): string;
+function swapHex(str: string): string;
 
 function padLeft(str: string, length: number, padding?: string): string;
 function padRight(str: string, length: number, padding?: string): string;

@@ -137,7 +137,7 @@ export function binaryToBuffer(bin: string): Buffer {
 }
 
 export function binaryToArray(bin: string): Uint8Array {
-  return new Uint8Array(splitBytes(bin) as any[]);
+  return new Uint8Array(splitBytes(bin).map(x => parseInt(x, 2)));
 }
 
 export function binaryToHex(bin: string | string, prefixed?: boolean): string {
@@ -247,6 +247,23 @@ export function splitBytes(str: string, byteSize = 8): string[] {
       `bytes string smaller than expected byte size: ${byteSize}`
     );
   return Array.from(bytes);
+}
+
+export function swapBytes(str: string): string {
+  return splitBytes(str)
+    .map(reverseString)
+    .join('');
+}
+
+export function swapHex(str: string): string {
+  return binaryToHex(swapBytes(hexToBinary(str)));
+}
+
+function reverseString(str: string) {
+  return str
+    .split('')
+    .reverse()
+    .join('');
 }
 
 function padString(
