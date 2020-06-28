@@ -154,21 +154,21 @@ export function binaryToNumber(bin: string): number {
 
 // -- Validators ----------------------------------------- //
 
-export function isBinaryString(value: any): boolean {
-  if (typeof value !== 'string' || !new RegExp(/^[01]+$/).test(value)) {
+export function isBinaryString(str: any): boolean {
+  if (typeof str !== 'string' || !new RegExp(/^[01]+$/).test(str)) {
     return false;
   }
-  if (value.length % 8 !== 0) {
+  if (str.length % 8 !== 0) {
     return false;
   }
   return true;
 }
 
-export function isHexString(value: any, length?: number): boolean {
-  if (typeof value !== 'string' || !value.match(/^0x[0-9A-Fa-f]*$/)) {
+export function isHexString(str: any, length?: number): boolean {
+  if (typeof str !== 'string' || !str.match(/^0x[0-9A-Fa-f]*$/)) {
     return false;
   }
-  if (length && value.length !== 2 + 2 * length) {
+  if (length && str.length !== 2 + 2 * length) {
     return false;
   }
   return true;

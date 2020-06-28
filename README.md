@@ -55,8 +55,8 @@ function binaryToNumber(bin: string): number;
 
 // -- Validators ----------------------------------------- //
 
-function isBinaryString(value: any): boolean;
-function isHexString(value: any, length?: number): boolean;
+function isBinaryString(str: any): boolean;
+function isHexString(str: any, length?: number): boolean;
 function isBuffer(val: any): boolean;
 function isTypedArray(val: any): boolean;
 function isArrayBuffer(val: any): boolean;
