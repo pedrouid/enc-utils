@@ -31,7 +31,7 @@ const TEST_EMPTY_HEX = '0'.repeat(TEST_EMPTY_BYTES * 2);
 const TEST_EMPTY_BUF = Buffer.from(TEST_EMPTY_HEX, 'hex');
 
 const TEST_SIMPLE_BIN = '01010101';
-const TEST_INVALID_BIN = TEST_SIMPLE_BIN.slice(-1);
+const TEST_INVALID_BIN = TEST_SIMPLE_BIN.slice(1);
 const TEST_SWAPPED_BIN = '10101010';
 const TEST_SWAPPED_HEX = 'a676c6f6269676e6';
 
@@ -266,6 +266,7 @@ describe('EncUtils', () => {
     const expected = TEST_NUMBER_NUM;
     const result = encUtils.binaryToNumber(input);
     expect(compare(result, expected)).toBeTruthy();
+    expect(result).toEqual(parseInt(input, 2));
   });
 
   // -- Validators ----------------------------------------- //
@@ -354,9 +355,7 @@ describe('EncUtils', () => {
   });
 
   it('splitBytes', async () => {
-    expect(() => encUtils.splitBytes(TEST_INVALID_BIN)).toThrowError(
-      `bytes string smaller than expected byte size: 8`
-    );
+    expect(encUtils.splitBytes(TEST_INVALID_BIN)).toEqual([TEST_SIMPLE_BIN]);
     expect(encUtils.splitBytes(TEST_SIMPLE_BIN)).toEqual([TEST_SIMPLE_BIN]);
     expect(encUtils.splitBytes(TEST_SIMPLE_BIN + TEST_SIMPLE_BIN)).toEqual([
       TEST_SIMPLE_BIN,

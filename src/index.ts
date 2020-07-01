@@ -127,7 +127,7 @@ export function numberToUtf8(num: number): string {
 
 export function numberToBinary(num: number): string {
   const bin = (num >>> 0).toString(2);
-  return padLeft(bin, calcByteLength(bin.length));
+  return sanitizeBytes(bin);
 }
 
 // -- Binary ----------------------------------------------- //
@@ -241,12 +241,8 @@ export function calcByteLength(length: number, byteSize = 8): number {
 }
 
 export function splitBytes(str: string, byteSize = 8): string[] {
-  const bytes = str.match(new RegExp(`.{${byteSize}}`, 'gi'));
-  if (!bytes)
-    throw new Error(
-      `bytes string smaller than expected byte size: ${byteSize}`
-    );
-  return Array.from(bytes);
+  const bytes = sanitizeBytes(str).match(new RegExp(`.{${byteSize}}`, 'gi'));
+  return Array.from(bytes || []);
 }
 
 export function swapBytes(str: string): string {
@@ -257,6 +253,14 @@ export function swapBytes(str: string): string {
 
 export function swapHex(str: string): string {
   return binaryToHex(swapBytes(hexToBinary(str)));
+}
+
+function sanitizeBytes(
+  str: string,
+  byteSize = 8,
+  padding = STRING_ZERO
+): string {
+  return padLeft(str, calcByteLength(str.length, byteSize), padding);
 }
 
 function reverseString(str: string) {
@@ -307,7 +311,7 @@ export function addHexPrefix(hex: string): string {
 
 export function sanitizeHex(hex: string): string {
   hex = removeHexPrefix(hex);
-  hex = hex.length % 2 !== 0 ? STRING_ZERO + hex : hex;
+  hex = sanitizeBytes(hex, 2);
   if (hex) {
     hex = addHexPrefix(hex);
   }
