@@ -363,6 +363,12 @@ describe('EncUtils', () => {
     ]);
   });
 
+  it('sanitizeBytes', async () => {
+    expect(encUtils.sanitizeBytes('001')).toEqual('00000001');
+    expect(encUtils.sanitizeBytes('001', 2)).toEqual('0001');
+    expect(encUtils.sanitizeBytes('1', 2, '1')).toEqual('11');
+  });
+
   it('swapBytes', async () => {
     expect(encUtils.swapBytes(TEST_SIMPLE_BIN)).toEqual(TEST_SWAPPED_BIN);
   });

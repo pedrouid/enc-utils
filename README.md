@@ -72,6 +72,7 @@ function trimRight(data: Buffer, length: number): Buffer;
 
 function calcByteLength(length: number, byteSize: number): number;
 function splitBytes(str: string, byteSize: number): string[];
+function sanitizeBytes(str: string, byteSize: number, padding: string): string;
 function swapBytes(str: string): string;
 function swapHex(str: string): string;
 

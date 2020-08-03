@@ -255,7 +255,7 @@ export function swapHex(str: string): string {
   return binaryToHex(swapBytes(hexToBinary(str)));
 }
 
-function sanitizeBytes(
+export function sanitizeBytes(
   str: string,
   byteSize = 8,
   padding = STRING_ZERO
