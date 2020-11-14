@@ -328,6 +328,15 @@ describe('EncUtils', () => {
     expect(compare(result, expected)).toBeTruthy();
   });
 
+  it('concatArrays', async () => {
+    const input = [TEST_STRING_ARR, TEST_STRING_ARR];
+    const expected = new Uint8Array(
+      Array.from(TEST_STRING_ARR).concat(Array.from(TEST_STRING_ARR))
+    );
+    const result = encUtils.concatArrays(...input);
+    expect(compare(result, expected)).toBeTruthy();
+  });
+
   it('trimLeft', async () => {
     const input = Buffer.concat([TEST_EMPTY_BUF, TEST_STRING_BUF]);
     const expected = TEST_STRING_BUF;

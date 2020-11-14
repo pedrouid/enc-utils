@@ -67,6 +67,7 @@ function getEncoding(str: string);
 // -- Misc ----------------------------------------------- //
 
 function concatBuffers(...args: Buffer[]): Buffer;
+function concatArrays(...args: Uint8Array[]): Uint8Array;
 function trimLeft(data: Buffer, length: number): Buffer;
 function trimRight(data: Buffer, length: number): Buffer;
 

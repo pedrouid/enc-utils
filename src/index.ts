@@ -221,6 +221,12 @@ export function concatBuffers(...args: Buffer[]): Buffer {
   return result;
 }
 
+export function concatArrays(...args: Uint8Array[]): Uint8Array {
+  let result: number[] = [];
+  args.forEach(arg => (result = result.concat(Array.from(arg))));
+  return new Uint8Array([...result]);
+}
+
 export function trimLeft(data: Buffer, length: number): Buffer {
   const diff = data.length - length;
   if (diff > 0) {
