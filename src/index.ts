@@ -1,4 +1,3 @@
-import BN from 'bn.js';
 import _isTypedArray from 'is-typedarray';
 import typedArrayToBuffer from 'typedarray-to-buffer';
 
@@ -31,7 +30,7 @@ export function bufferToUtf8(buf: Buffer): string {
 }
 
 export function bufferToNumber(buf: Buffer): number {
-  return hexToNumber(bufferToHex(buf));
+  return buf.readUIntBE(0, buf.length);
 }
 
 export function bufferToBinary(buf: Buffer): string {
@@ -77,7 +76,7 @@ export function hexToUtf8(hex: string): string {
 }
 
 export function hexToNumber(hex: string): number {
-  return new BN(removeHexPrefix(hex), 'hex').toNumber();
+  return arrayToNumber(hexToArray(hex));
 }
 
 export function hexToBinary(hex: string): string {
@@ -99,7 +98,9 @@ export function utf8ToHex(utf8: string, prefixed = false): string {
 }
 
 export function utf8ToNumber(utf8: string): number {
-  return new BN(utf8, 10).toNumber();
+  const num = parseInt(utf8, 10);
+  assert(isDefined(num), 'Number can only safely store up to 53 bits');
+  return num;
 }
 
 export function utf8ToBinary(utf8: string): string {
@@ -109,20 +110,19 @@ export function utf8ToBinary(utf8: string): string {
 // -- Number ----------------------------------------------- //
 
 export function numberToBuffer(num: number): Buffer {
-  return hexToBuffer(numberToHex(num));
+  return binaryToBuffer(numberToBinary(num));
 }
 
 export function numberToArray(num: number): Uint8Array {
-  return hexToArray(numberToHex(num));
+  return binaryToArray(numberToBinary(num));
 }
 
-export function numberToHex(num: number | string, prefixed?: boolean): string {
-  const hex = removeHexPrefix(sanitizeHex(new BN(num).toString(16)));
-  return prefixed ? addHexPrefix(hex) : hex;
+export function numberToHex(num: number, prefixed?: boolean): string {
+  return binaryToHex(numberToBinary(num), prefixed);
 }
 
 export function numberToUtf8(num: number): string {
-  return new BN(num).toString();
+  return `${num}`;
 }
 
 export function numberToBinary(num: number): string {
@@ -269,28 +269,6 @@ export function sanitizeBytes(
   return padLeft(str, calcByteLength(str.length, byteSize), padding);
 }
 
-function reverseString(str: string) {
-  return str
-    .split('')
-    .reverse()
-    .join('');
-}
-
-function padString(
-  str: string,
-  length: number,
-  left: boolean,
-  padding = STRING_ZERO
-): string {
-  const diff = length - str.length;
-  let result = str;
-  if (diff > 0) {
-    const pad = padding.repeat(diff);
-    result = left ? pad + str : str + pad;
-  }
-  return result;
-}
-
 export function padLeft(
   str: string,
   length: number,
@@ -329,4 +307,42 @@ export function removeHexLeadingZeros(hex: string): string {
   hex = removeHexPrefix(hex);
   hex = hex.startsWith(STRING_ZERO) ? hex.substring(1) : hex;
   return prefixed ? addHexPrefix(hex) : hex;
+}
+
+// -- Private ----------------------------------------------- //
+
+function isUndefined(value: any): boolean {
+  return typeof value === 'undefined';
+}
+
+function isDefined(value: any): boolean {
+  return !isUndefined(value);
+}
+
+function assert(assertion: boolean, errorMessage: string) {
+  if (!assertion) {
+    throw new Error(errorMessage);
+  }
+}
+
+function reverseString(str: string) {
+  return str
+    .split('')
+    .reverse()
+    .join('');
+}
+
+function padString(
+  str: string,
+  length: number,
+  left: boolean,
+  padding = STRING_ZERO
+): string {
+  const diff = length - str.length;
+  let result = str;
+  if (diff > 0) {
+    const pad = padding.repeat(diff);
+    result = left ? pad + str : str + pad;
+  }
+  return result;
 }
