@@ -14,7 +14,7 @@ import {
   TEST_STRING_UTF8,
 } from './shared';
 
-describe('EncUtils', () => {
+describe('Validators', () => {
   // -- Validators ----------------------------------------- //
 
   it('isBinaryString', async () => {
